@@ -1,0 +1,45 @@
+name: Deploy to Heroku
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'  # Cambia esto a la versión que necesites
+
+      - name: Install dependencies
+        run: npm install
+    
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+          echo "heroku-cli installed"
+      
+      - name: Authenticate with Heroku
+        env:
+            HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}  # Asegúrate de que tu API Key esté en Secrets
+        run: |
+            echo "machine api.heroku.com" >> ~/.netrc
+            echo "  login oauth2:${HEROKU_API_KEY}" >> ~/.netrc
+            echo "machine git.heroku.com" >> ~/.netrc
+            echo "  login oauth2:${HEROKU_API_KEY}" >> ~/.netrc
+            chmod 600 ~/.netrc  # Asegura que el archivo sea solo accesible para el usuario
+
+      - name: Deploy to Heroku
+        env:
+            HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}  # Añade tu API key en Secrets
+        run: |
+            heroku git:remote -a woowup  # Reemplaza con el nombre de tu app
+            git push heroku main  # Cambia 'main' si usas otra rama
+
