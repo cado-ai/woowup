@@ -1,9 +1,9 @@
 const EmailService = require('./emailService');
 
 exports.sendEmail = async (req, res, next) => {
-    console.log('sendEmail');
+    const data = req.body;
     try {
-        await EmailService.sendEmailWithDifferentProvider()
+        await EmailService.sendEmailWithDifferentProvider({data})
         res.sendStatus(200);
     } catch (err) {
         next(err);

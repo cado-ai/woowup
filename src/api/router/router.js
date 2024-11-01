@@ -1,12 +1,6 @@
 const router = require('express').Router();
-const { handleApiError, handleNotFound } = require('../middleware');
 
-router.use('/email/v1', require('../components/auth/authRouter'));
+router.use('/email', require('../components/email/emailRouter'));
 
-// Catch not-found requests
-router.use(handleNotFound);
-
-// Handle api errors
-router.use(handleApiError);
 
 module.exports = router;

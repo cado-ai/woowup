@@ -1,10 +1,14 @@
 const router = require('express').Router();
+const e = require('express');
 const { sendEmail } = require('./emailController');
+const email = require('.');
+const { sendEmailValidate } = require('./emailValidator');
+const {validateRequest} = require('../../middleware');
 
 /**
  * @swagger
  * paths:
- *  /email/v1/send-email:
+ *  /email/send-email:
  *   post:
  *    summary: Send email
  *    security: [] 
@@ -40,6 +44,7 @@ const { sendEmail } = require('./emailController');
  */
 router.post(
     '/send-email',
+    validateRequest(sendEmailValidate),
     sendEmail
 );
 

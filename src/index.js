@@ -1,9 +1,11 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
+const cors = require('cors');
+const router = require('./api/router');
+const { corsOptions } = require('./services/auth/cors');
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 let server;
@@ -30,12 +32,12 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
+        url: 'http://localhost:'+PORT,
       },
     ],
   },
   apis: [
-    `${path.join(__dirname, 'src/api/components/email/emailRouter.js')}`,
+    `${path.join(__dirname, 'api/components/email/emailRouter.js')}`,
   ],
 };
 
@@ -47,11 +49,21 @@ app.use(
   swaggerUi.setup(specs, { explorer: true })
 );
 
+app.get('/', (req, res) => {
+  res.send('Woowup Api Rest V1.0');
+});
 
-// Middleware para parsear JSON
+const startServer = async () => {
+  app.use(express.json());
+  app.use(cors(corsOptions));
+  app.use(router);
+  server = app.listen(PORT, (error) => {
+    if (error) throw error;
+
+    console.log(`Server running in staging mode on port ${PORT}...`);
+  });
+};
+
 app.use(express.json());
 
-// Inicia el servidor
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+startServer();
