@@ -16,7 +16,13 @@ exports.corsOptions = {
     'Authorization',
   ],
   methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-  origin: whitelist,
+  origin: (origin, callback) => {
+    if (whitelist.some((pattern) => pattern.test(origin)) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   preflightContinue: false,
 };

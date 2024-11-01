@@ -6,6 +6,7 @@ const router = require('./api/router');
 const { corsOptions } = require('./services/auth/cors');
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 let server;
@@ -57,6 +58,7 @@ const startServer = async () => {
   app.use(express.json());
   app.use(cors(corsOptions));
   app.use(router);
+  
   server = app.listen(PORT, (error) => {
     if (error) throw error;
 

@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const e = require('express');
 const { sendEmail } = require('./emailController');
-const email = require('.');
 const { sendEmailValidate } = require('./emailValidator');
 const {validateRequest} = require('../../middleware');
 

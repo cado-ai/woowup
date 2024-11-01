@@ -1,0 +1,37 @@
+name: Deploy to Heroku to Woowup
+
+on:
+  push:
+    branches:
+      - main  # Cambia esto si usas otra rama para producción
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+          echo "heroku-cli installed"
+
+      - name: Deploy to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}  # Asegúrate de que tu API Key esté en Secrets
+        run: |
+          heroku git:remote -a woowup  # Reemplaza con el nombre de tu app
+          git remote set-url heroku https://oauth2:${HEROKU_API_KEY}@git.heroku.com/woowup.git
+          git push heroku main  # Cambia 'main' si usas otra rama

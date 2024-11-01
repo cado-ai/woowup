@@ -4,7 +4,6 @@ exports.sendEmailWithMailgun = async (to, subject, message) => {
 
     const mailgunService = new MailgunService();
 
-    // Envía el correo
     try {
         await mailgunService.sendEmail(to, subject, message);
         console.log('Email sent successfully');
