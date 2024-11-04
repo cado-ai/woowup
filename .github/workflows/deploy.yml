@@ -3,7 +3,7 @@ name: Deploy to Heroku to Woowup
 on:
   push:
     branches:
-      - main  # Cambia esto si usas otra rama para producción
+      - main
 
 jobs:
   deploy:
@@ -32,6 +32,6 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}  # Asegúrate de que tu API Key esté en Secrets
         run: |
-          heroku git:remote -a woowup  # Reemplaza con el nombre de tu app
+          heroku git:remote -a woowup
           git remote set-url heroku https://oauth2:${HEROKU_API_KEY}@git.heroku.com/woowup.git
-          git push heroku main  # Cambia 'main' si usas otra rama
+          git push -f heroku main
