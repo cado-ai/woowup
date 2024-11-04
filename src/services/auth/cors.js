@@ -1,9 +1,10 @@
 const { rootDomain } = require('../../config');
 
-// eslint-disable-next-line security/detect-non-literal-regexp
-const rootDomainRegex = new RegExp(`${rootDomain}$`);
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escapa caracteres especiales de regex
+}
 
-// List of allowed origins
+const rootDomainRegex = new RegExp(`^${escapeRegExp(rootDomain)}$`);
 const whitelist = [/localhost/i, rootDomainRegex];
 
 exports.corsOptions = {
@@ -17,7 +18,7 @@ exports.corsOptions = {
   ],
   methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
   origin: (origin, callback) => {
-    if (whitelist.some((pattern) => pattern.test(origin)) || !origin) {
+    if (!origin || whitelist.some((pattern) => pattern.test(origin))) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
