@@ -1,5 +1,4 @@
 const BaseError = require('./baseError');
-const logger = require('../loggers/logger');
 
 const isOperationalError = (error) => {
     if (error instanceof BaseError) {
@@ -12,7 +11,7 @@ const isOperationalError = (error) => {
 const logError = (error, level) => {
     const { code, stack, message } = error;
 
-    logger.log(level, {
+    console.log(level, {
         code,
         stack,
         message,
@@ -27,9 +26,6 @@ const notifyError = (error, context) => {
 exports.handleError = (error, context) => {
     // Determine whether error is operational or not
     const isOperational = isOperationalError(error);
-    //const level = isOperational ? 'warn' : 'error';
-    // Log all errors
-    //logError(error, level);
 
     // Notify the developers if the error is not operational or has status 500 (internal server error)
     if (!isOperational || error.statusCode === 500) {
