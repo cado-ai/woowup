@@ -1,6 +1,8 @@
 const { rootDomain } = require('../../config');
 
 function escapeRegExp(string) {
+  console.log('rootDomain', rootDomain)
+  console.log('string',string)
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escapa caracteres especiales de regex
 }
 
