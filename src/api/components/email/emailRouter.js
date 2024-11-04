@@ -3,6 +3,7 @@ const e = require('express');
 const { sendEmail } = require('./emailController');
 const { sendEmailValidate } = require('./emailValidator');
 const {validateRequest} = require('../../middleware');
+const authorizeUser = require('../../middleware/authorizeUser');
 
 /**
  * @swagger
@@ -10,7 +11,8 @@ const {validateRequest} = require('../../middleware');
  *  /email/send-email:
  *   post:
  *    summary: Send email
- *    security: [] 
+ *    security:
+ *     - bearerAuth: [] 
  *    tags: [Email]
  *    consumes:
  *      - application/json
@@ -44,6 +46,7 @@ const {validateRequest} = require('../../middleware');
 router.post(
     '/send-email',
     validateRequest(sendEmailValidate),
+    authorizeUser(),
     sendEmail
 );
 

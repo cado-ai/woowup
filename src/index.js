@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 require('dotenv').config();
 const cors = require('cors');
+const { apiUrl } = require('./config');
 const router = require('./api/router');
 const { corsOptions } = require('./services/auth/cors');
 const swaggerJsdoc = require("swagger-jsdoc");
@@ -25,7 +26,14 @@ const options = {
     docExpansion: 'none',
     components: {
       securitySchemes: {
-        bearerAuth: {},
+        bearerAuth: {
+          type: 'http',
+          in: 'header',
+          name: 'Authorization',
+          description: 'Bearer token to access these api endpoints',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
       },
     },
     security: {
@@ -33,11 +41,12 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:'+PORT,
+        url: apiUrl,
       },
     ],
   },
   apis: [
+    `${path.join(__dirname, 'api/components/auth/authRouter.js')}`,
     `${path.join(__dirname, 'api/components/email/emailRouter.js')}`,
   ],
 };
@@ -50,22 +59,16 @@ app.use(
   swaggerUi.setup(specs, { explorer: true })
 );
 
-app.get('/', (req, res) => {
-  res.send('Woowup Api Rest V1.0');
-});
-
 const startServer = async () => {
-  app.use(express.json());
-  app.use(cors(corsOptions));
-  app.use(router);
-  
+
+
   server = app.listen(PORT, (error) => {
     if (error) throw error;
-
+    app.use(express.json());
+    app.use(cors(corsOptions));
+    app.use(router);
     console.log(`Server running in staging mode on port ${PORT}...`);
   });
 };
-
-app.use(express.json());
 
 startServer();
