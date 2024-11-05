@@ -53,6 +53,10 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 
+app.get('/', (req, res) => {
+  res.send('Woowup Solutions Architecture 1.0');
+});
+
 app.use(
   "/api-docs",
   swaggerUi.serve,

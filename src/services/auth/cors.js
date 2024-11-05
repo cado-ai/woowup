@@ -3,11 +3,10 @@ const { rootDomain } = require('../../config');
 function escapeRegExp(string) {
   console.log('rootDomain', rootDomain)
   console.log('string',string)
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escapa caracteres especiales de regex
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-const rootDomainRegex = new RegExp(`^${escapeRegExp(rootDomain)}$`);
-const whitelist = [/localhost/i, rootDomainRegex];
+const whitelist = [/localhost/i,/https:\/\/woowup-079b50bd940f.herokuapp.com/i];
 
 exports.corsOptions = {
   allowedHeaders: [
